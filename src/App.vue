@@ -2,8 +2,25 @@
 <script setup>
 // State
 import { ref } from "vue";
+
 const showModal = ref(false); // Open and close Modal window by changing State
 const newNote = ref(""); // Adding new note
+const notes = ref([]);
+
+function getRandomColor() {
+  return "hsl(" + Math.random() * 360 + ", 100%, 75%)";
+}
+
+const addNote = () => {
+  notes.value.push({
+    id: Math.floor(Math.random() * 1000000),
+    text: newNote.value,
+    date: new Date(),
+    backgroundColor: getRandomColor(),
+  });
+  showModal.value = false;
+  newNote.value = "";
+};
 </script>
 
 <template>
@@ -17,7 +34,7 @@ const newNote = ref(""); // Adding new note
           cols="30"
           rows="10"
         ></textarea>
-        <button>Add Note</button>
+        <button @click="addNote">Add Note</button>
         <button @click="showModal = false" class="close">Close</button>
       </div>
     </div>
@@ -28,12 +45,16 @@ const newNote = ref(""); // Adding new note
       </header>
 
       <div class="card-container">
-        <div class="card">
+        <div
+          v-for="note in notes"
+          :key="note.id"
+          class="card"
+          :style="{ backgroundColor: note.backgroundColor }"
+        >
           <p class="main-text">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Tempora
-            assumenda nostrum commodi sequi perspiciatis voluptas?
+            {{ note.text }}
           </p>
-          <p class="date">18.01.2023</p>
+          <p class="date">{{ note.date.toLocaleDateString("en-BE") }}</p>
         </div>
       </div>
     </div>
@@ -127,10 +148,12 @@ header button {
   background-color: blueviolet;
   color: #fff;
   border: none;
+  cursor: pointer;
 }
 
 .modal .close {
   background-color: red;
   margin-top: 7px;
+  cursor: pointer;
 }
 </style>
