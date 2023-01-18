@@ -6,12 +6,16 @@ import { ref } from "vue";
 const showModal = ref(false); // Open and close Modal window by changing State
 const newNote = ref(""); // Adding new note
 const notes = ref([]);
+const errorMessage = ref("");
 
 function getRandomColor() {
   return "hsl(" + Math.random() * 360 + ", 100%, 75%)";
 }
 
 const addNote = () => {
+  if (newNote.value.length < 5) {
+    return (errorMessage.value = "Note needs to be 5 characters or more!!");
+  }
   notes.value.push({
     id: Math.floor(Math.random() * 1000000),
     text: newNote.value,
@@ -34,6 +38,7 @@ const addNote = () => {
           cols="30"
           rows="10"
         ></textarea>
+        <p v-if="errorMessage">{{ errorMessage }}</p>
         <button @click="addNote">Add Note</button>
         <button @click="showModal = false" class="close">Close</button>
       </div>
@@ -155,5 +160,9 @@ header button {
   background-color: red;
   margin-top: 7px;
   cursor: pointer;
+}
+
+.modal p {
+  color: red;
 }
 </style>
