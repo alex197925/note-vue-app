@@ -2,14 +2,21 @@
 <script setup>
 // State
 import { ref } from "vue";
-const showModal = ref(false);
+const showModal = ref(false); // Open and close Modal window by changing State
+const newNote = ref(""); // Adding new note
 </script>
 
 <template>
   <main>
     <div v-if="showModal" class="overlay">
       <div class="modal">
-        <textarea name="note" id="note" cols="30" rows="10"></textarea>
+        <textarea
+          v-model="newNote"
+          name="note"
+          id="note"
+          cols="30"
+          rows="10"
+        ></textarea>
         <button>Add Note</button>
         <button @click="showModal = false" class="close">Close</button>
       </div>
